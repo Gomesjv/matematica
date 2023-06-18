@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cálculo do Traço da Matriz</title>
+</head>
+<body>
+  <h1>Cálculo do Traço da Matriz</h1>
+
+  <label for="ordem">Ordem da matriz quadrada:</label>
+  <input type="number" id="ordem" min="1">
+
+  <button onclick="obterMatriz()">Inserir Matriz</button>
+
+  <div id="matrizInput" style="display: none;">
+    <h2>Inserir elementos da matriz:</h2>
+    <div id="elementos"></div>
+    <button onclick="calcularTraco()">Calcular Traço</button>
+  </div>
+
+  <div id="resultado" style="display: none;">
+    <h2>Resultado:</h2>
+    <p id="traco"></p>
+  </div>
+
+  <script>
+    let ordem;
+    let matriz = [];
+
+    function obterMatriz() {
+      ordem = parseInt(document.getElementById('ordem').value);
+      if (!isNaN(ordem) && ordem > 0) {
+        document.getElementById('matrizInput').style.display = 'block';
+        criarInputs();
+      } else {
+        alert('Por favor, insira uma ordem válida para a matriz.');
+      }
+    }
+
+    function criarInputs() {
+      const elementosDiv = document.getElementById('elementos');
+      elementosDiv.innerHTML = '';
+
+      for (let i = 0; i < ordem; i++) {
+        for (let j = 0; j < ordem; j++) {
+          const label = document.createElement('label');
+          label.textContent = `Elemento [${i}][${j}]: `;
+          const input = document.createElement('input');
+          input.type = 'number';
+          input.id = `elemento-${i}-${j}`;
+          elementosDiv.appendChild(label);
+          elementosDiv.appendChild(input);
+          elementosDiv.appendChild(document.createElement('br'));
+        }
+      }
+    }
+
+    function calcularTraco() {
+      matriz = [];
+
+      for (let i = 0; i < ordem; i++) {
+        const linha = [];
+        for (let j = 0; j < ordem; j++) {
+          const elemento = parseInt(document.getElementById(`elemento-${i}-${j}`).value);
+          linha.push(elemento);
+        }
+        matriz.push(linha);
+      }
+
+      const traco = calcularTracoMatriz(matriz);
+
+      document.getElementById('resultado').style.display = 'block';
+      document.getElementById('traco').textContent = `O traço da matriz é: ${traco}`;
+    }
+
+    function calcularTracoMatriz(matriz) {
+      if (!isMatrizQuadrada(matriz)) {
+        return "A matriz precisa ser quadrada para calcular o traço.";
+      }
+
+      let traco = 0;
+      for (let i = 0; i < matriz.length; i++) {
+        traco += matriz[i][i];
+      }
+
+      return traco;
+    }
+
+    function isMatrizQuadrada(matriz) {
+      const linhas = matriz.length;
+      for (let i = 0; i < linhas; i++) {
+        if (matriz[i].length !== linhas) {
+          return false;
+        }
+      }
+      return true;
+    }
+  </script>
+</body>
+</html>
